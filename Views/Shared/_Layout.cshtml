@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentientGeek Test</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />   
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet" />
+
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background-color: #f3f3f3;
+        }
+        .ui-dialog-titlebar {
+            background-color: #ffffff !important;
+            background-image: none;
+            color: #000;
+        }
+        .ui-widget-header {
+            border:none;
+            border-bottom: 1px solid #ddd !important;
+        }
+        .btn-link {
+        color:black!important;
+        }
+        .field-validation-error {
+            color: red !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />       
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="~/Scripts/notify.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

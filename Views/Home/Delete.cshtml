@@ -1,0 +1,48 @@
+﻿@model SentientGeek_assesment.Models.Employee
+@{
+    Layout = null;
+}
+
+<style>
+   
+    .text-warning {
+        color: #e4e70a;
+    }
+    .footer-popup {
+        background-color: #ecf0f1;
+        padding: 10px;
+        text-align: right;
+    }
+    .body-area {
+        padding: .5em 1em;
+    }
+    .ui-dialog .ui-dialog-content {
+        padding: 0;
+    }
+    .form-group{
+        margin-bottom:0;
+    }
+    .ui-dialog{
+        padding:0;
+    }
+        .ui-dialog .ui-dialog-title {
+            font-size: 18px;
+            font-weight: 400;
+        }
+</style>
+
+@using (Html.BeginForm("delete", "home", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.EmpId)
+
+    <div class="form-group">
+        <div class="body-area">
+            <h5>Are you sure you want to delete this Records?</h5>
+            <p class="text-warning">This action can not be undone</p>
+        </div>
+        <div class="footer-popup">
+            <input type="button" value="Cancel" id="btnCancel" class="btn btn-link text-dark" />
+            <input type="submit" value="Delete" class="btn btn-danger" />
+        </div>
+    </div>
+}

@@ -1,0 +1,267 @@
+﻿@{
+    ViewBag.Title = "Employee List";
+}
+
+<style>
+
+    .text-warning {
+        color: #e4e70a;
+    }
+
+    .ui-dialog .ui-dialog-title {
+        font-size: 18px;
+        font-weight: 400;
+    }
+</style>
+<style>
+    .bg-heading {
+        background-color: #425d7d;
+        color: #fff;
+        padding: 10px;
+    }
+
+        .bg-heading h2 {
+            margin-top: 10px;
+            font-size: 21px;
+        }
+</style>
+<div class="thumbnail">
+    <div class="thumbnail bg-heading">
+        <h2 class="pull-left">Manage Employees</h2>
+        <div class="pull-right">
+            <a class="btn btn-danger" onclick="Deletebulk()"><i class="fa fa-minus-circle "></i> &nbsp; Delete</a>
+            <a class="btn btn-success" onclick="PopupForm('@Url.Action("create","home")','Add Employee')"><i class="fa fa-plus-circle"></i>&nbsp; Add New Employee</a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+
+
+
+    <table id="EmpTable" class="table table-striped" style="width:100%">
+
+        <thead>
+            <tr>
+                <th><input name="select_all" value="1" id="example-select-all" type="checkbox" /></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div id="dialog-confirm" title="Delete Employee?" style="display:none;">
+    <div class="body-area">
+        <h5>Are you sure you want to delete this Records?</h5>
+        <p class="text-warning">This action can not be undone</p>
+    </div>
+</div>
+
+@section scripts{
+
+    <script src="//cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.12.0/js/dataTables.bootstrap5.min.js"></script>
+
+    <script type="text/javascript">
+        function Cancel() {
+            $('#btnCancel').click(function () {
+                $(".ui-dialog-content").dialog("close");
+            });
+        }
+        var Popup, dataTable;
+
+        $(document).ready(function () {
+
+            dataTable = $("#EmpTable").DataTable({
+
+                "ajax": {
+                    "url": "/home/GetData",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+
+                "columns": [
+                    {
+                        "data": "EmpId", "render": function (data) {
+
+                            return '<input type="checkbox" name="id[]" value="'
+                            + $('<div/>').text(data).html() + '">';
+                        }
+                    },
+                    { "data": "EmpName" },
+                    { "data": "Emailid" },
+                    { "data": "Address" },
+                    { "data": "MobileNo" },
+                    {
+                        "data": "EmpId", "render": function (data) {
+
+                            return "<a class='' onclick=PopupForm('@Url.Action("Edit","home")/" + data + "','Edit&nbsp;Employee')><i class='fa-solid fa-pencil' style='color:#e4e70a;cursor:pointer;'></i></a> <a style='margin-left:5px' onclick=PopupForm('@Url.Action("delete","home")/" + data + "','Delete&nbsp;Employee')><i class='fa-solid fa-trash' style='color:red;cursor:pointer;'></i></a>";
+                        }
+                    }
+                ],
+                "language": {
+                    "emptyTable" : "No data found please click on <b>Add New </b> Button"
+                },
+                searching: false,
+                ordering: false,
+                "bLengthChange": false
+            });
+
+            $('#example-select-all').on('click', function () {
+                // Check/uncheck all checkboxes in the table
+                var rows = dataTable.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+        });
+
+
+        function PopupForm(url,title) {
+
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+
+                    formDiv.html(response);
+
+                    Popup = formDiv.dialog({
+                        modal: true,
+                        autoOpen : true,
+                        resizable : false,
+                        title : title,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) { Cancel();}
+                    });
+
+                });
+        }
+
+        function SubmitForm(form) {
+
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: $(form).serialize(),
+                success: function (data) {
+
+                    if (data.success) {
+
+                        Popup.dialog('close');
+                        dataTable.ajax.reload();
+
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className:"success"
+                        })
+                    }
+                }
+                });
+            }
+
+            return false;
+
+        }
+
+        function Delete(id,title) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+
+                    formDiv.html(response);
+
+                    Popup = formDiv.dialog({
+                        modal: true,
+                        autoOpen : true,
+                        resizable : false,
+                        title : title,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        }
+
+                    });
+
+                });
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        $('#btnCancel').click(function () {
+            $(".ui-dialog-content").dialog("close");
+        });
+        function Deletebulk() {
+            var selectedIDs = new Array();
+            $('#EmpTable tbody td input:checkbox').each(function () {
+                if ($(this).prop('checked')) {
+                    selectedIDs.push($(this).val());
+                }
+            });
+            if (selectedIDs.length > 0) {
+
+                $("#dialog-confirm").dialog({
+                    resizable: false,
+                    height: "auto",
+                    width: "auto",
+                    modal: true,
+                    open: true,
+                    buttons: [
+                        {
+                            text: "Cancel",
+                            "class": 'btn btn-link text-dark',
+                            click: function () {
+                                $(this).dialog("close");
+                            }
+                        },
+                        {
+                            text: "Delete",
+                            "class": 'btn btn-danger',
+                            click: function () {
+                                var dial = $(this);
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/home/Deletebulk",
+                                    data: JSON.stringify(selectedIDs),
+                                    async: false,
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    success: function (msg) {
+
+                                        dial.dialog("close");
+                                        dataTable.ajax.reload();
+                                    },
+                                    error: function (msg) {
+                                        dial.dialog("close");
+
+                                        $.notify(msg, {
+                                            globalPosition: "top center",
+                                            className: "error"
+                                        })
+                                    }
+                                });
+                            }
+                        }
+                    ],
+                    open: function () {
+                        $('.ui-dialog-buttonpane').find('.btn').removeClass(' ui-button ui-corner-all ui-widget');
+                    }
+                });
+            }
+            else {
+                $.notify("No value selected", {
+                    globalPosition: "top center",
+                    className: "error"
+                })
+            }
+        };
+
+
+
+    </script>
+}  
