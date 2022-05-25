@@ -5,26 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SentientGeek Test</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />   
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet" />
 
     <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
     <style type="text/css">
+
         body {
             background-color: #f3f3f3;
         }
+
         .ui-dialog-titlebar {
             background-color: #ffffff !important;
             background-image: none;
             color: #000;
         }
+
         .ui-widget-header {
-            border:none;
+            border: none;
             border-bottom: 1px solid #ddd !important;
         }
+
         .btn-link {
-        color:black!important;
+            color: black !important;
         }
+
         .field-validation-error {
             color: red !important;
         }
@@ -34,7 +39,7 @@
 
     <div class="container body-content">
         @RenderBody()
-        <hr />       
+        <hr />
     </div>
 
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
@@ -44,5 +49,18 @@
     <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
     <script src="~/Scripts/notify.min.js"></script>
     @RenderSection("scripts", required: false)
+    <!--loader begins-->
+    <div class="loader-area">
+        <svg class="loader" width="40" height="40" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="15" fill="transparent" stroke="#f00" stroke-width="2">
+                <animateTransform attributeName="transform"
+                                  type="rotate"
+                                  from="0 20 20" to="360 20 20"
+                                  begin="0s" dur="5s"
+                                  repeatCount="indefinite" />
+            </circle>
+        </svg>
+    </div>
+    <!--loader ends-->
 </body>
 </html>

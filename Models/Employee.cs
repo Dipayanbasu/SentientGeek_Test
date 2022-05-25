@@ -29,8 +29,21 @@ namespace SentientGeek_assesment.Models
         public string Emailid { get; set; }
 
         [Display(Name = "Phone")]
-        [Required(ErrorMessage = "MobileNo is Required")]        
+        [Required(ErrorMessage = "MobileNo is Required")]
         [MaxLength(20)]
         public string MobileNo { get; set; }
+    }
+
+    public class mailsend
+    {
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = "Email ID is Required")]
+        [DataType(DataType.EmailAddress)]
+        [MaxLength(100)]
+        [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Incorrect Email Format")]
+        public string emailid { get; set; }
+
+        [Display(Name = "Report Type")]
+        public string reporttype { get; set; }
     }
 }
